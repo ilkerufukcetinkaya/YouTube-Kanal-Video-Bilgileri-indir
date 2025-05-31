@@ -3,36 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube Kanal Video Bilgileri İndir V1</title>
+    <title>YouTube Kanal Video Bilgileri İndir</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center">
-    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-2xl">
-        <h2 class="text-3xl font-bold text-center text-gray-800 mb-6">YouTube Kanal Video Bilgileri İndir V1</h2>
-
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h1 class="text-2xl font-bold mb-6 text-center">YouTube Kanal Video Bilgileri İndir V1</h1>
+        
+        <!-- Kanal URL veya ID Giriş Formu -->
+        <form method="POST" class="mb-4">
+            <label for="channel_input" class="block text-sm font-medium text-gray-700">Kanal URL veya ID:</label>
+            <input type="text" id="channel_input" name="channel_input" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" placeholder="örn: https://www.youtube.com/@KanalAdi veya https://www.youtube.com/c/KanalAdi" required>
+            <p class="text-gray-500 text-sm mt-2">Not: Kanal URL'sini tam olarak girin (örn: https://www.youtube.com/@KanalAdi). Hata alırsanız, Kanal ID'yi (UC ile başlayan) doğrudan girebilirsiniz.</p>
+            <button type="submit" class="mt-4 w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600">Kanal ID Bul</button>
+        </form>
+        
+        <!-- Flash Mesajları -->
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
-                <div class="mb-4">
-                    {% for category, message in messages %}
-                        <p class="{% if category == 'success' %}text-green-600{% else %}text-red-600{% endif %} text-center font-medium">{{ message }}</p>
-                    {% endfor %}
-                </div>
+                {% for category, message in messages %}
+                    <div class="mt-4 p-2 rounded-md {{ 'bg-green-100 text-green-700' if category == 'success' else 'bg-red-100 text-red-700' }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
             {% endif %}
         {% endwith %}
-
-        <h3 class="text-xl font-semibold text-gray-700 mb-4">1. Kanal Linkinden Kanal ID Bul</h3>
-        <form method="post" class="mb-6">
-            <label for="channel_input" class="block text-gray-600 mb-2">Kanal ID veya URL:</label>
-            <input type="text" id="channel_input" name="channel_input" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-            <button type="submit" class="mt-3 w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition duration-300">Kanal ID Bul</button>
-        </form>
-
+        
+        <!-- Kanal ID ile Video İndirme Formu -->
         {% if channel_id %}
-            <h3 class="text-xl font-semibold text-gray-700 mb-4">Bulunan Kanal ID: <span class="text-blue-600">{{ channel_id }}</span></h3>
-            <h3 class="text-xl font-semibold text-gray-700 mb-4">2. Videoları Excel Olarak İndir</h3>
-            <form method="post">
-                <input type="hidden" name="channel_id" value="{{ channel_id }}">
-                <button type="submit" class="w-full bg-green-600 text-white p-3 rounded-lg hover:bg-green-700 transition duration-300">Videoları İndir</button>
+            <form method="POST">
+                <label for="channel_id" class="block text-sm font-medium text-gray-700">Bulunan Kanal ID:</label>
+                <input type="text" id="channel_id" name="channel_id" value="{{ channel_id }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" readonly>
+                <button type="submit" class="mt-4 w-full bg-green-500 text-white p-2 rounded-md hover:bg-green-600">Videoları İndir</button>
             </form>
         {% endif %}
     </div>
